@@ -2,6 +2,8 @@ using Xunit;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
+using SentinelTrack.Domain.Entities;
+using SentinelTrack.Infrastructure.Context;
 
 public class PaginationTests
 {
