@@ -1,4 +1,4 @@
-# SentinelTrack API
+# SentinelTrack
 
 **SentinelTrack** é uma API REST desenvolvida em .NET 8 com Entity Framework Core, criada para gerenciar o fluxo de **motos** em **pátios**. O projeto simula um sistema de controle de operações para uma empresa de aluguel de motos, com regras de capacidade, alocação e gerenciamento de veículos.
 
