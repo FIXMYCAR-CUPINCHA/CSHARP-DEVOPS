@@ -1,3 +1,3 @@
-namespace DefaultNamespace;
+namespace SentinelTrack;
 
 public partial class Program { }
