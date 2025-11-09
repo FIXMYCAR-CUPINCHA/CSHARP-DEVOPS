@@ -142,7 +142,8 @@ builder.Services.AddAuthentication(options =>
 // APP BUILD
 // ==========================
 var app = builder.Build();
-app.Urls.Add("http://*:80");
+var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
+app.Urls.Add($"http://*:{port}");
 
 // ==========================
 // SWAGGER UI
