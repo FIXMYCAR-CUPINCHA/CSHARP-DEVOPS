@@ -57,6 +57,14 @@ steps:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'drop'
   
+  # Instala o dotnet-ef globalmente
+  - script: dotnet tool install --global dotnet-ef --version 8.0.0
+    displayName: 'Instalar dotnet-ef'
+
+  # Adiciona o tool path ao PATH do agente
+  - script: set PATH=%PATH%;%USERPROFILE%\.dotnet\tools
+    displayName: 'Atualizar PATH para dotnet-ef'
+  
   # Rodar migrations antes do deploy
   - script: |
       echo "Rodando migrations no Azure SQL..."
