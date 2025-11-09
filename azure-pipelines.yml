@@ -68,7 +68,7 @@ steps:
   # Rodar migrations antes do deploy
   - script: |
       echo "Rodando migrations no Azure SQL..."
-      dotnet ef database update --connection "$(connectionString)" --project SentinelTrack.csproj
+      dotnet ef database update --connection "$(connectionString)" --project SentinelTrack/SentinelTrack.csproj
     displayName: 'Executar EF Migrations'
   
   # Build e push da imagem Docker
