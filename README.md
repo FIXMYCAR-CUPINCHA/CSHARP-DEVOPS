@@ -78,7 +78,7 @@ controlar a infraestrutura (pátios), gerenciar os ativos (motocicletas) e regis
 1. Clone o repositório:
    ```bash
    git clone alterar
-   cd SentinelTrackAPI/
+   cd SentinelTrack/
 
 2. Faça o restore:
    ```bash
@@ -94,7 +94,7 @@ controlar a infraestrutura (pátios), gerenciar os ativos (motocicletas) e regis
    dotnet run
 
 5. Caso o Swagger não abra sozinho acesse em:
-   https://localhost:5000/swagger/index.html
+   https://localhost:5000/swagger
 
 ---
 
