@@ -1,0 +1,83 @@
+# azure-pipelines.yml
+trigger:
+  - main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  connectionString: $(AZURE_SQL_CONNECTION_STRING)
+  dockerRegistryServiceConnection: 'ACR-SentinelTrack'
+  dockerImageName: 'sentineltrack-app'
+
+steps:
+  # Instala o .NET SDK
+  - task: UseDotNet@2
+    displayName: 'Instalar .NET SDK'
+    inputs:
+      packageType: 'sdk'
+      version: '8.0.x'
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+  
+  # Restaura pacotes
+  - task: DotNetCoreCLI@2
+    displayName: 'Restaurar pacotes NuGet'
+    inputs:
+      command: 'restore'
+      projects: '**/*.csproj'
+  
+  # Build do projeto
+  - task: DotNetCoreCLI@2
+    displayName: 'Build do projeto'
+    inputs:
+      command: 'build'
+      projects: '**/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+  
+  # Executa os testes
+  - task: DotNetCoreCLI@2
+    displayName: 'Executar testes'
+    inputs:
+      command: 'test'
+      projects: '**/*.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+  
+  # Publica artefatos
+  - task: DotNetCoreCLI@2
+    displayName: 'Publicar artefatos'
+    inputs:
+      command: 'publish'
+      projects: '**/*.csproj'
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publicar artefato no DevOps'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+  
+  # Rodar migrations antes do deploy
+  - script: |
+      echo "Rodando migrations no Azure SQL..."
+      dotnet ef database update --connection "$(connectionString)" --project SentinelTrack.csproj
+    displayName: 'Executar EF Migrations'
+  
+  # Build e push da imagem Docker
+  - task: Docker@2
+    displayName: 'Build e Push Docker Image'
+    inputs:
+      containerRegistry: $(dockerRegistryServiceConnection)
+      repository: $(dockerImageName)
+      command: 'buildAndPush'
+      Dockerfile: 'Dockerfile'
+      buildContext: '.'
+      tags: 'latest'
+  
+  # Deploy no Azure Web App via Docker
+  - task: AzureWebAppContainer@1
+    displayName: 'Deploy no Azure Web App via Docker'
+    inputs:
+      azureSubscription: 'Azure-SentinelTrack'
+      appName: 'app-sentineltrack-sprint4'
+      containers: '$(dockerImageName):latest'
