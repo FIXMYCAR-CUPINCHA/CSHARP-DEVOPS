@@ -24,7 +24,7 @@ WORKDIR /app
 COPY --from=build /app/publish ./
 
 # Expõe a porta que sua aplicação usa
-EXPOSE 8080
+EXPOSE 80
 
 # Comando para iniciar a aplicação
 ENTRYPOINT ["dotnet", "SentinelTrack.dll"]

@@ -142,6 +142,7 @@ builder.Services.AddAuthentication(options =>
 // APP BUILD
 // ==========================
 var app = builder.Build();
+app.Urls.Add("http://*:80");
 
 // ==========================
 // SWAGGER UI
