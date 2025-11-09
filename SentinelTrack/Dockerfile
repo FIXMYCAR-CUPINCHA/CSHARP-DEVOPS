@@ -5,14 +5,13 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copia csproj e restaura dependências
-COPY ["SentinelTrack/SentinelTrack.csproj", "SentinelTrack/"]
-RUN dotnet restore "SentinelTrack/SentinelTrack.csproj"
+COPY ["SentinelTrack.csproj", "./"]
+RUN dotnet restore "SentinelTrack.csproj"
 
-# Copia o restante do código
-COPY SentinelTrack/. ./SentinelTrack/
+# Copia todo o restante do código
+COPY . ./
 
 # Build e publish
-WORKDIR /src/SentinelTrack
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
 # --------------------------
