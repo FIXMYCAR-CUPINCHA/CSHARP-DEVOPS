@@ -62,7 +62,8 @@ steps:
     displayName: 'Instalar dotnet-ef'
 
   # Adiciona o tool path ao PATH do agente
-  - script: set PATH=%PATH%;%USERPROFILE%\.dotnet\tools
+  - script: |
+      export PATH=$PATH:$HOME/.dotnet/tools
     displayName: 'Atualizar PATH para dotnet-ef'
   
   # Rodar migrations antes do deploy
