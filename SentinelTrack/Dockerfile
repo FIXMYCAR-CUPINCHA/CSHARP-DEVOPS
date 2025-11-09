@@ -1,24 +1,30 @@
-# Imagem base do SDK .NET 8 para build
+# --------------------------
+# Stage 1: Build
+# --------------------------
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Copia csproj e restaura dependências
+# Copia o csproj e restaura dependências
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copia o restante do código e faz build
+# Copia todo o restante do código
 COPY . ./
-RUN dotnet publish -c Release -o out
 
-# Imagem runtime
+# Build e publish
+RUN dotnet publish -c Release -o /app/publish
+
+# --------------------------
+# Stage 2: Runtime
+# --------------------------
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
 # Copia a build do estágio anterior
-COPY --from=build /app/out ./
+COPY --from=build /app/publish ./
 
 # Expõe a porta que sua aplicação usa
-EXPOSE 5000
+EXPOSE 8080
 
 # Comando para iniciar a aplicação
 ENTRYPOINT ["dotnet", "SentinelTrack.dll"]
