@@ -78,8 +78,8 @@ steps:
       containerRegistry: $(dockerRegistryServiceConnection)
       repository: $(dockerImageName)
       command: 'buildAndPush'
-      Dockerfile: 'Dockerfile'
-      buildContext: '.'
+      Dockerfile: 'SentinelTrack/Dockerfile'
+      buildContext: 'SentinelTrack'
       tags: 'latest'
   
   # Deploy no Azure Web App via Docker
